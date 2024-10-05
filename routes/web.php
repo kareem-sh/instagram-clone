@@ -3,10 +3,15 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/explore',[PostController::class,'explore'])->name('explore');
+require __DIR__.'/auth.php';
 
+Route::get('/explore',[PostController::class,'explore'])->name('explore');
+Route::get('/{user:username}',[UserController::class,'index'])->middleware('auth')->name('user_profile');
+Route::get('/{user:username}/edit',[UserController::class,'edit'])->middleware('auth')->name('edit_profile');
+Route::patch('/{user:username}/update',[UserController::class,'update'])->middleware('auth')->name('update_profile');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,4 +31,4 @@ Route::controller(PostController::class)->middleware('auth')->group(function(){
 
 Route::post('/p/{post:slug}/comment',[CommentController::class,'store'])->middleware('auth')->name('store_comment');
 
-require __DIR__.'/auth.php';
+

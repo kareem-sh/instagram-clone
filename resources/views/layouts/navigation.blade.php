@@ -47,7 +47,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')" class="text-gray-800 hover:text-gray-600">
+                        <x-dropdown-link :href="route('user_profile',['user'=>auth()->user()->username])" class="text-gray-800 hover:text-gray-600">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
