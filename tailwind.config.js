@@ -14,6 +14,7 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            // Remove dark mode related customizations
         },
     },
 
