@@ -21,7 +21,7 @@
                             <a href="/{{ $post->owner->username }}"
                                 class="font-bold text-gray-800">{{ $post->owner->username }}</a>
                         </div>
-                        @if ($post->owner->id == auth()->id())
+                        @can('update',$post)
                             <a href="/p/{{ $post->slug }}/edit"><i class="bx bx-message-square-edit text-xl"></i></a>
 
 
@@ -32,7 +32,10 @@
                                     <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
                                 </button>
                             </form>
-                            @elseif (auth()->user()->is_following($post->owner))
+                        @endcan
+
+                        @cannot('update',$post)
+                            @if (auth()->user()->is_following($post->owner))
                                  <a href="/{{ $post->owner->username }}/unfollow"
                                 class="w-30 text-blue-500 px-3 py-1 rounded text-center self-start">
                                 {{ __('Unfollow') }}
@@ -43,6 +46,7 @@
                                 {{ __('Follow') }}
                             </a>
                             @endif
+                        @endcannot
                     </div>
                 </div>
 

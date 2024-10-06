@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 Route::get('/explore',[PostController::class,'explore'])->name('explore');
-Route::get('/{user:username}',[UserController::class,'index'])->middleware('auth')->name('user_profile');
+Route::get('/{user:username}',[UserController::class,'index'])->name('user_profile');
 Route::get('/{user:username}/edit',[UserController::class,'edit'])->middleware('auth')->name('edit_profile');
 Route::patch('/{user:username}/update',[UserController::class,'update'])->middleware('auth')->name('update_profile');
 
@@ -27,7 +27,7 @@ Route::controller(PostController::class)->middleware('auth')->group(function(){
     Route::get('/p/{post:slug}','show')->name('show_post');
     Route::get('/p/{post:slug}/edit','edit')->name('edit_post');
     Route::patch('/p/{post:slug}/update','update')->name('update_post');
-    Route::delete('/p/{post:slug}/delete','delete')->name('delete_post');
+    Route::delete('/p/{post:slug}/delete','destroy')->name('delete_post');
 });
 
 Route::post('/p/{post:slug}/comment',[CommentController::class,'store'])->middleware('auth')->name('store_comment');

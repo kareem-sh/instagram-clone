@@ -14,6 +14,7 @@ class UserController extends Controller
     }
 
     public function edit(User $user){
+        abort_if(Auth::user()->cannot('edit-update-profile',$user),403);
         return view('user.edit',compact('user'));
     }
 
