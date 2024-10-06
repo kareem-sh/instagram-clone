@@ -9,9 +9,20 @@
             <img src="storage/app/public/{{$post->image}}" class="h-auto w-full object-cover" alt="{{$post->description}}">
         </div>
         <div class="p-3">
+            <a href="/p/{{$post->slug}}/like">
+                @if ($post->liked(auth()->user()))
+                <i class="bx bxs-heart text-red-600 text-3xl hover:text-red-400 cursor-pointer mr-3"></i>
+                @else
+                <i class="bx bx-heart text-3xl hover:text-red-400 cursor-pointer mr-3"></i>
+                @endif
+                
+            </a>
+        </div>
+        <div class="p-3">
             <a href="/{{$post->owner->username}}" class="font-bold mr-1">{{$post->owner->username}}</a>
             {{$post->description}}
         </div>
+
         @if ($post->comments()->count()>0)
              <a href="/p/{{$post->slug}}"
                 class="p-3 font-bold text-sm text-gray-500">

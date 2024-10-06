@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -49,5 +49,15 @@ class UserController extends Controller
 
  
     return redirect()->route('user_profile', $user);
+    }
+
+    public function follow(User $user){
+        Auth::user()->follow($user);
+        return back();
+    }
+
+    public function unfollow(User $user){
+        Auth::user()->unfollow($user);
+        return back();
     }
 }
