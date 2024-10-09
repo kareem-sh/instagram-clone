@@ -76,9 +76,26 @@
 
         <!-- Posts Grid -->
         @if ($user->private_account && auth()->id() !== $user->id)
-            <div class="w-full text-center mt-20">
-                {{ __('This Account is Private. Follow to see their photos') }}
+           @auth
+               @if (auth()->user()->is_following($user))
+               <div class="grid grid-cols-3 gap-1 my-5 md:gap-4">
+                 @foreach($user->posts as $post)
+                  <a href="/p/{{ $post->slug }}" class="relative">
+                   <img src="storage/app/public/{{ $post->image }}" alt="Post by {{ $user->username }}" class="w-full h-full object-cover">
+                  </a>
+                 @endforeach
+               </div>
+                @else
+                 <div class="w-full text-center mt-20">
+                    {{ __('This Account is Private. Follow to see their photos') }}
+                 </div>
+                 @endif
+           @endauth
+           @guest
+           <div class="w-full text-center mt-20">
+            {{ __('This Account is Private. Follow to see their photos') }}
             </div>
+           @endguest
         @else
             @if ($user->posts->count() === 0)
                 <div class="w-full text-center mt-20">
@@ -89,13 +106,6 @@
                     @foreach($user->posts as $post)
                         <a href="/p/{{ $post->slug }}" class="relative">
                             <img src="storage/app/public/{{ $post->image }}" alt="Post by {{ $user->username }}" class="w-full h-full object-cover">
-                            @if($post->is_pinned)
-                                <div class="absolute top-2 left-2 bg-white rounded-full p-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
-                                </div>
-                            @endif
                         </a>
                     @endforeach
                 </div>

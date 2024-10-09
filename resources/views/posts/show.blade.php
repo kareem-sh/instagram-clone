@@ -82,7 +82,18 @@
                         @endforeach
                     </div>
                 </div>
-
+                 
+                {{-- Interaction Buttons --}}
+                <div class="p-3 border-t">
+                    <div class="flex justify-between items-center">
+                        <livewire:like :post="$post"/>
+                        <a class="grow" onclick="document.getElementById('comment_body').focus()">
+                            <i class="bx bx-comment text-3xl hover:text-gray-400 cursor-pointer mr-3"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+                <livewire:likedby :post="$post" />
                 {{-- Comment Input Section --}}
                 <div class="border-t pt-3">
                     <form action="/p/{{ $post->slug }}/comment" method="POST">
@@ -95,28 +106,10 @@
                         </div>
                     </form>
                 </div>
+                
 
-                {{-- Interaction Buttons --}}
-                <div class="mt-4">
-                    <div class="flex justify-between items-center mb-3">
-                        <a href="/p/{{ $post->slug }}/like">
-                            @if ($post->liked(auth()->user()))
-                                <i
-                                    class="bx bxs-heart text-red-600 text-3xl hover:text-red-400 cursor-pointer mr-3"></i>
-                            @else
-                                <i class="bx bx-heart text-3xl hover:text-red-400 cursor-pointer mr-3"></i>
-                            @endif
-
-                        </a>
-                        <button class="text-gray-600 hover:text-blue-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 3h-2v5h2V7zm0 6h-2v2h2v-2z" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+               
+               
             </div>
         </div>
     </div>

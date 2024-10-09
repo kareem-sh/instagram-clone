@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="font-sans antialiased bg-gray-100 text-black"> <!-- Set to a light gray -->
     <div class="min-h-screen bg-gray-100"> <!-- Container with a light gray background -->
@@ -33,5 +34,6 @@
             {{ $slot }}
         </main>
     </div>
+    @livewireScripts
 </body>
 </html>
