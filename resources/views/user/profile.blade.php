@@ -23,24 +23,10 @@
                                 <a href="/{{ $user->username }}/edit" class="border text-sm font-semibold py-1 px-4 rounded-md border-neutral-300 text-center">
                                     {{ __('Edit Profile') }}
                                 </a>
-                            @elseif (auth()->user()->is_following($user))
-                                <a href="/{{ $user->username }}/unfollow" class="w-30 bg-blue-500 text-white px-3 py-1 rounded text-center self-start">
-                                    {{ __('Unfollow') }}
-                                </a>
-                            @elseif (auth()->user()->is_pending($user))
-                                <span class="w-30 bg-gray-500 text-white px-3 py-1 rounded text-center self-start">
-                                    {{ __('Pending') }}
-                                </span>
                             @else
-                                <a href="/{{ $user->username }}/follow" class="w-30 bg-blue-500 text-white px-3 py-1 rounded text-center self-start">
-                                    {{ __('Follow') }}
-                                </a>
+                             <livewire:follow-button :userId="$user->id" :classes="'bg-blue-500 text-white'" :classes2="'bg-gray-400 text-white'" />
                             @endif
-                        @else
-                            <a href="/{{ $user->username }}/follow" class="w-30 bg-blue-500 text-white px-3 py-1 rounded text-center self-start">
-                                {{ __('Follow') }}
-                            </a>
-                        @endauth
+                         @endauth
                     </div>
 
                     <!-- Follow/Followers/Posts Count -->
@@ -49,11 +35,11 @@
                             {{ $user->posts->count() }}<span class="font-bold">{{ $user->posts->count() > 1 ? ' posts' : ' post' }}</span>
                         </div>
                         <div>
-                            <span class="font-bold">{{ $user->followers->count() }}</span> {{ __('followers') }}
+                            <button  class="font-bold">
+                                {{ $user->followers->count() }} {{ __('followers') }}
+                            </button> 
                         </div>
-                        <div>
-                            <span class="font-bold">{{ $user->following->count() }}</span> {{ __('following') }}
-                        </div>
+                        <livewire:following :userId="$user->id" />
                     </div>
 
                     <!-- User Bio -->

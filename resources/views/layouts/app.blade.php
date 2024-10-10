@@ -35,5 +35,7 @@
         </main>
     </div>
     @livewireScripts
+    @livewire('wire-elements-modal')
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
