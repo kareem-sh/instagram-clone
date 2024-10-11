@@ -1,59 +1,60 @@
 <x-app-layout>
-    
-  <div class="flex flex-row max-w-3xl gap-8 mx-auto">
 
-  {{-- left-side --}}
+    <!-- Main Container -->
+    <div class="flex flex-col lg:flex-row max-w-4xl gap-8 mx-auto">
 
-    <div class="w-[30rem] mx-auto lg:w-[95rem]">
-      @forelse ($posts as $post)
-      <x-post :post="$post" />
-      @empty
-          <div class="max-w-2xl gap-8 mx-auto">
-            {{__('Start Following Your Friends and Enjoy')}}
-          </div>
-      @endforelse
+        {{-- Left-side (Posts Section) --}}
+        <livewire:post-list />
         
-    </div>
-  {{-- Right-side --}}
-     <div class="hidden w-[50rem] lg:flex lg:flex-col pt-4">
-        <div class="flex flex-row text-sm">
-            <div class="mr-5">
-              <a href="/{{auth()->user()->username}}">
-                  <img src="{{auth()->user()->image}}" alt="{{auth()->user()->username}}" class="border border-gray-300 rounded-full h-12 w-12"/>
-              </a>
+        {{-- Right-side (Suggestions Section) --}}
+        <div class="hidden lg:flex lg:flex-col lg:w-[40%] pt-4">
+
+            <!-- User Info -->
+            <div class="flex items-center mb-6">
+                <a href="/{{ auth()->user()->username }}" class="mr-4">
+                    <img src="{{ auth()->user()->image }}" alt="{{ auth()->user()->username }}"
+                        class="border border-gray-300 rounded-full h-12 w-12" />
+                </a>
+                <div>
+                    <a href="/{{ auth()->user()->username }}"
+                        class="font-bold text-sm hover:text-blue-500 transition duration-300">
+                        {{ auth()->user()->username }}
+                    </a>
+                    <div class="text-gray-500 text-xs">{{ auth()->user()->name }}</div>
+                </div>
             </div>
-            <div class="flex flex-col">
-                <a href="/{{auth()->user()->username}}" class="font-bold">{{auth()->user()->username}}</a>
-                <div class="text-gray-500 text-sm">{{auth()->user()->name}}</div>
-              </div>
+
+            <!-- Suggestions Section -->
+            <div>
+                <h3 class="text-gray-500 font-semibold mb-4">{{ __('Suggestions For You') }}</h3>
+                <ul>
+                    @foreach ($suggested_users as $suggested_user)
+                        <li class="flex items-center justify-between my-4">
+                            <!-- User Avatar -->
+                            <a href="/{{ $suggested_user->username }}" class="mr-4 shrink-0">
+                                <img src="{{ $suggested_user->image }}" alt="{{ $suggested_user->username }}"
+                                    class="border border-gray-300 rounded-full h-9 w-9" />
+                            </a>
+
+                            <!-- Username and Follower Status -->
+                            <div class="flex-grow truncate">
+                                <a href="/{{ $suggested_user->username }}"
+                                    class="font-bold text-sm hover:text-blue-500 transition duration-300 truncate">
+                                    {{ $suggested_user->username }}
+                                    @if (auth()->user()->is_follower($suggested_user))
+                                        <span class="text-xs text-gray-500">{{ __('Follower') }}</span>
+                                    @endif
+                                </a>
+                            </div>
+
+
+                            <!-- Follow Button -->
+                            <livewire:follow-button :userId="$suggested_user->id" :classes="'text-blue-500 hover:text-blue-600 transition duration-300'" :classes2="'text-gray-500 hover:text-gray-600 transition duration-300'" />
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-        <div class="mt-5">
-          <h3 class="text-gray-500 font-bold">{{ __('Suggestion For You') }}</h3>
-          <ul>
-            @foreach ($suggested_users as $suggested_user)
-              <li class="flex flex-row my-5 text-sm justify-items-center">
-                <div class="mr-5">
-                  <a href="/{{$suggested_user->username}}">
-                    <img src="{{$suggested_user->image}}" class="border border-gray-300 rounded-full h-9 w-9"/>
-                  </a>
-                </div>
-                <div class="flex flex-col grow">
-                  <a href="/{{$suggested_user->username}}" class="font-bold">{{$suggested_user->username}}
-                    @if (auth()->user()->is_follower($suggested_user))
-                      <span class="text-xs text-gray-500">{{__('Follower')}}</span>
-                    @endif
-                  </a>
-                </div>
-                @if (auth()->user()->is_pending($suggested_user))
-                  <span class="text-gray-500 font-bold">{{__('Pending')}}</span>
-                @else
-                <a href="/{{$suggested_user->username}}/follow" class="text-blue-500 font-bold">{{__('Follow')}}</a>
-                @endif
-              </li>
-            @endforeach
-          </ul>
-         </div>
-     </div>
-  </div>
+    </div>
 
 </x-app-layout>

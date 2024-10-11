@@ -10,7 +10,8 @@
     <!-- Modal Body (Following List) -->
     <ul class="overflow-y-auto px-4 py-2">
         @forelse($this->following_list as $following)
-            <li class="flex items-center p-3 border-b border-neutral-100 last:border-0">
+            <!-- Added wire:key to uniquely identify each user item -->
+            <li class="flex items-center p-3 border-b border-neutral-100 last:border-0" wire:key="following-{{ $following->id }}">
                 <!-- User Avatar -->
                 <div class="mr-3">
                     <img src="{{ $following->image }}" class="w-10 h-10 rounded-full border border-neutral-300" alt="{{ $following->username }}">
@@ -28,7 +29,8 @@
                 @auth
                 <div>
                     <!-- Call the unfollow method and pass the user's ID -->
-                    <button class="border border-gray-300 px-3 py-1 rounded text-xs font-medium text-gray-700 hover:bg-gray-100 transition" wire:click="unfollow({{ $following->id }})">
+                    <button class="border border-gray-300 px-3 py-1 rounded text-xs font-medium text-white bg-blue-500 transition"
+                            wire:click="unfollow({{ $following->id }})">
                         {{ __('Unfollow') }}
                     </button>
                 </div>

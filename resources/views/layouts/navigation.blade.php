@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-200">
+<nav x-data="{ open: false, showPending: false }" class="bg-white border-b border-gray-200">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -22,23 +22,32 @@
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 @auth
                     <div class="flex items-center space-x-6">
-                        <div class="space-x-3 text-[1.3rem] mr-5 leading-5">
-                            <a href="{{ route('home_page') }}">
+                        <div class="space-x-4 text-[1.3rem] mr-5 leading-5 flex items-center">
+                            <a href="{{ route('home_page') }}" class="text-gray-800 hover:text-blue-500 transition">
                                 {!! url()->current() == route('home_page') ? '<i class="bx bxs-home-alt-2"></i>' : '<i class="bx bx-home-alt-2"></i>' !!}
                             </a>
-                            <a href="{{ route('explore') }}">
+                            <a href="{{ route('explore') }}" class="text-gray-800 hover:text-blue-500 transition">
                                 {!! url()->current() == route('explore') ? '<i class="bx bxs-compass"></i>' : '<i class="bx bx-compass"></i>' !!}
                             </a>
-                            <a href="{{ route('create_post') }}">
+                            <a href="{{ route('create_post') }}" class="text-gray-800 hover:text-blue-500 transition">
                                 {!! url()->current() == route('create_post') ? '<i class="bx bxs-message-square-add"></i>' : '<i class="bx bx-message-square-add"></i>' !!}
                             </a>
+                            <!-- Inbox Icon with Dropdown for Pending Followers -->
+                            <div class="relative">
+                                <i class='bx bxs-inbox cursor-pointer text-gray-800 hover:text-blue-500 transition' @click="showPending = !showPending"></i>
+                                <livewire:pending-followers-count />
+                                <!-- Pending Followers Dropdown -->
+                                <div x-show="showPending" @click.away="showPending = false" class="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-lg" style="display: none;">
+                                    <livewire:pending-followers-list />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endauth
 
                 <div class="hidden md:block">
                     @auth
-                        <x-dropdown align="right" width="48">
+                        <x-dropdown align="right"  width="48">
                             <x-slot name="trigger">
                                 <img src="{{ auth()->user()->image }}" class="w-8 h-8 rounded-full">
                             </x-slot>

@@ -34,11 +34,8 @@
                         <div>
                             {{ $user->posts->count() }}<span class="font-bold">{{ $user->posts->count() > 1 ? ' posts' : ' post' }}</span>
                         </div>
-                        <div>
-                            <button  class="font-bold">
-                                {{ $user->followers->count() }} {{ __('followers') }}
-                            </button> 
-                        </div>
+                        
+                        <livewire:followers :userId="$user->id" />
                         <livewire:following :userId="$user->id" />
                     </div>
 

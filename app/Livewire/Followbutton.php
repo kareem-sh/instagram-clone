@@ -21,6 +21,7 @@ namespace App\Livewire;
             $this->user = User::find($this->userId);
             Auth::user()->toggle_follow($this->user);
             $this->set_follow_state();
+            $this->dispatch('followUser');
         }
 
         public function set_follow_state(){
