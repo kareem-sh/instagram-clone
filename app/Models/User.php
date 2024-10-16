@@ -24,6 +24,7 @@ class User extends Authenticatable
         'private_account',
         'email',
         'password',
+        'lang',
     ];
 
     /**

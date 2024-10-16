@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\ChangeLanguage;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -12,7 +13,7 @@ require __DIR__.'/auth.php';
 Route::get('/explore',[PostController::class,'explore'])->name('explore');
 Route::get('/{user:username}',[UserController::class,'index'])->name('user_profile');
 Route::get('/{user:username}/edit',[UserController::class,'edit'])->middleware('auth')->name('edit_profile');
-Route::patch('/{user:username}/update',[UserController::class,'update'])->middleware('auth')->name('update_profile');
+Route::patch('/{user:username}/update',[UserController::class,'update'])->middleware('auth')->name('update_profile')->middleware('lang');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

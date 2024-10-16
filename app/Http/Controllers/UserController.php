@@ -43,12 +43,14 @@ class UserController extends Controller
     } else {
         $data->put('private_account', 1);
     }
-
-    session()->flash('success',__('Your Profile has been Updated!'));
-
+    session()->flash('success',__('Your Profile has been Updated!',[],$data['lang']));
     $user->update($data->toArray());
 
- 
+    if($request->has('lang')){
+        session()->put('lang');
+    }
+    // app()->setLocale(auth()->user()->lang);
+    // dd(app()->getLocale());
     return redirect()->route('user_profile', $user);
     }
 

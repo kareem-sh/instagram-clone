@@ -36,7 +36,8 @@ class UpdateUserProfileRequest extends FormRequest
                     $fail('The current password is incorrect.');
                 }
             }],
-            'password' => ['nullable', 'min:8', 'confirmed']
+            'password' => ['nullable', 'min:8', 'confirmed'],
+            'lang'=>'required'
         ];
     }
 }

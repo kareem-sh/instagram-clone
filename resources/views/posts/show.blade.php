@@ -22,9 +22,8 @@
                                 class="font-bold text-gray-800">{{ $post->owner->username }}</a>
                         </div>
                         @can('update',$post)
-                            <a href="/p/{{ $post->slug }}/edit"><i class="bx bx-message-square-edit text-xl"></i></a>
-
-
+                            {{-- <a href="/p/{{ $post->slug }}/edit"><i class="bx bx-message-square-edit text-xl"></i></a> --}}
+                            <button onclick="Livewire.dispatch('openModal', { component: 'edit-post-modal', arguments: { post: {{ $post->id }} }})"><i class="bx bx-message-square-edit text-xl"></i></button>
                             <form action="/p/{{ $post->slug }}/delete" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -92,7 +91,7 @@
                             <textarea name="body" id="comment_body" placeholder="Add a comment..."
                                 class="h-5 grow resize-none overflow-hidden border-none bg-none p-0 placeholder-gray-400 outline-none focus:ring-0"
                                 rows="3"></textarea>
-                            <button type="submit" class="ml-5 border-none bg-white text-blue-500">Post</button>
+                            <button type="submit" class="ml-5 border-none bg-white text-blue-500">{{__('Post')}}</button>
                         </div>
                     </form>
                 </div>

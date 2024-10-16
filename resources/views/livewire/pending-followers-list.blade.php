@@ -1,11 +1,10 @@
 <div class="max-h-96 w-72 md:w-96 flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
     <div class="divide-y divide-neutral-200 overflow-auto">
         @forelse(auth()->user()->pending_followers as $pending)
-            <div class="flex items-center p-4">
+            <div class="flex items-center p-4 {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : '' }}">
                 <!-- User Avatar -->
-                <div class="mr-4 shrink-0">
-                    <img src="{{ $pending->image }}" class="w-12 h-12 rounded-full border border-neutral-300"
-                        alt="{{ $pending->username }}'s avatar">
+                <div class="{{ app()->getLocale() == 'ar' ? 'mr-4' : 'ml-4' }} shrink-0">
+                    <img src="{{ $pending->image }}" class="w-12 h-12 rounded-full border border-neutral-300" alt="{{ $pending->username }}'s avatar">
                 </div>
 
                 <!-- User Info -->
@@ -21,13 +20,11 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex space-x-2">
-                    <button class="border border-blue-500 bg-blue-500 text-white px-3 py-1 rounded text-sm transition duration-300 hover:bg-blue-600"
-                        wire:click="confirm({{ $pending->id }})">
+                <div class="flex {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : 'space-x-2' }}">
+                    <button class="border border-blue-500 bg-blue-500 text-white px-3 py-1 rounded text-sm transition duration-300 hover:bg-blue-600" wire:click="confirm({{ $pending->id }})">
                         {{ __('Confirm') }}
                     </button>
-                    <button class="border border-neutral-300 bg-neutral-100 text-neutral-700 px-3 py-1 rounded text-sm transition duration-300 hover:bg-neutral-200"
-                        wire:click="delete({{ $pending->id }})">
+                    <button class="border border-neutral-300 bg-neutral-100 text-neutral-700 px-3 py-1 rounded text-sm transition duration-300 hover:bg-neutral-200" wire:click="delete({{ $pending->id }})">
                         {{ __('Delete') }}
                     </button>
                 </div>

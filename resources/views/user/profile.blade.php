@@ -5,34 +5,34 @@
     <div class="container mx-auto px-4 py-8 w-full md:w-8/12">
         <!-- Profile Section (centered) -->
         <div class="flex flex-col items-center">
-            <div class="w-full flex justify-between items-start">
+            <div class="w-full flex {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : 'flex-row' }} justify-between items-start">
                 <!-- Profile Picture -->
-                <div class="relative">
+                <div class="relative {{ app()->getLocale() == 'ar' ? 'order-2' : 'order-1' }}">
                     <img src="{{ $user->image }}" alt="{{ $user->username }}'s profile picture" class="rounded-full w-32 h-32 md:w-40 md:h-40 border-4 border-neutral-200 object-cover">
                 </div>
 
                 <!-- User Info Section -->
-                <div class="ml-12 flex-1">
+                <div class="flex-1 {{ app()->getLocale() == 'ar' ? 'mr-12' : 'ml-12' }} {{ app()->getLocale() == 'ar' ? 'order-1' : 'order-2' }}">
                     <div class="flex items-center mb-2 mt-3">
                         <!-- Username -->
-                        <div class="text-2xl md:text-3xl font-semibold mr-4 mb-2">{{ $user->username }}</div>
+                        <div class="text-2xl md:text-3xl font-semibold {{ app()->getLocale() == 'ar' ? 'mr-6' : 'ml-4' }} mb-2">{{ $user->username }}</div>
 
                         <!-- Edit Profile / Follow Buttons -->
                         @auth
                             @if ($user->id == auth()->id())
-                                <a href="/{{ $user->username }}/edit" class="border text-sm font-semibold py-1 px-4 rounded-md border-neutral-300 text-center">
+                                <a href="/{{ $user->username }}/edit" class="border text-sm font-semibold py-1 px-4 rounded-md border-neutral-300 text-center rtl:mr-3 ltr:ml-3">
                                     {{ __('Edit Profile') }}
                                 </a>
                             @else
-                             <livewire:follow-button :userId="$user->id" :classes="'bg-blue-500 text-white'" :classes2="'bg-gray-400 text-white'" />
+                                <livewire:follow-button :userId="$user->id" :classes="'bg-blue-500 text-white'" :classes2="'bg-gray-400 text-white'" />
                             @endif
-                         @endauth
+                        @endauth
                     </div>
 
                     <!-- Follow/Followers/Posts Count -->
                     <div class="flex space-x-8 mb-4">
-                        <div>
-                            {{ $user->posts->count() }}<span class="font-bold">{{ $user->posts->count() > 1 ? ' posts' : ' post' }}</span>
+                        <div class="{{ app()->getLocale() == 'ar' ? 'ml-4' : 'mr-4' }}">
+                            {{ $user->posts->count() }}<span class="font-bold">{{ $user->posts->count() > 1 ? __(' posts') : __(' post') }}</span>
                         </div>
                         
                         <livewire:followers :userId="$user->id" />
@@ -42,7 +42,7 @@
                     <!-- User Bio -->
                     <div class="text-sm">
                         <p class="font-bold">{{ $user->name }}</p>
-                        <p>{!! nl2br(e($user->bio)) !!}</p>
+                        <p class="mt-1">{!! nl2br(e($user->bio)) !!}</p> <!-- Add margin-top to bio -->
                     </div>
                 </div>
             </div>
@@ -50,69 +50,28 @@
 
         <!-- Tabs (Posts/Reels/Tagged) -->
         <div class="border-t border-neutral-300 pt-4 mb-6 mt-6 text-center">
-            <div class="flex justify-center space-x-8">
-                <a href="#" class="text-sm font-semibold text-gray-700">{{ __('Posts') }}</a>
-                <a href="#" class="text-sm text-gray-500">{{ __('Reels') }}</a>
-                <a href="#" class="text-sm text-gray-500">{{ __('Tagged') }}</a>
-            </div>
         </div>
 
-        <!-- Posts Grid -->
-        @if ($user->private_account && auth()->id() !== $user->id)
-           @auth
-               @if (auth()->user()->is_following($user))
-               <div class="grid grid-cols-3 gap-1 my-5 md:gap-4">
-                 @foreach($user->posts as $post)
-                  <a href="/p/{{ $post->slug }}" class="relative">
-                   <img src="storage/app/public/{{ $post->image }}" alt="Post by {{ $user->username }}" class="w-full h-full object-cover">
-                  </a>
-                 @endforeach
-               </div>
-                @else
-                 <div class="w-full text-center mt-20">
-                    {{ __('This Account is Private. Follow to see their photos') }}
-                 </div>
-                 @endif
-           @endauth
-           @guest
-           <div class="w-full text-center mt-20">
-            {{ __('This Account is Private. Follow to see their photos') }}
-            </div>
-           @endguest
-        @else
-            @if ($user->posts->count() === 0)
-                <div class="w-full text-center mt-20">
-                    {{ __('This account has no posts yet.') }}
-                </div>
-            @else
-                <div class="grid grid-cols-3 gap-1 my-5 md:gap-4">
-                    @foreach($user->posts as $post)
-                        <a href="/p/{{ $post->slug }}" class="relative">
-                            <img src="storage/app/public/{{ $post->image }}" alt="Post by {{ $user->username }}" class="w-full h-full object-cover">
-                        </a>
-                    @endforeach
-                </div>
-            @endif
-        @endif
-    </div>
+        <livewire:PostProfile :userId="$user->id" />
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                setTimeout(function() {
-                    flashMessage.style.opacity = '0'; 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var flashMessage = document.getElementById('flash-message');
+                if (flashMessage) {
                     setTimeout(function() {
-                        flashMessage.style.display = 'none'; 
-                    }, 500);
-                }, 3000); 
-            }
-        });
-    </script>
+                        flashMessage.style.opacity = '0'; 
+                        setTimeout(function() {
+                            flashMessage.style.display = 'none'; 
+                        }, 500);
+                    }, 3000); 
+                }
+            });
+        </script>
 
-    <style>
-        #flash-message {
-            transition: opacity 0.8s ease-out; /* Smooth fade out */
-        }
-    </style>
+        <style>
+            #flash-message {
+                transition: opacity 0.8s ease-out; /* Smooth fade out */
+            }
+        </style>
+    </div>
 </x-app-layout>
